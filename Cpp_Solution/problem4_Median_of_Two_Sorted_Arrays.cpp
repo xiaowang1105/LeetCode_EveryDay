@@ -5,6 +5,8 @@
 	> Created Time: Mon 09 Apr 2018 02:05:02 PM CST
  ************************************************************************/
 
+// Running Time is O(m + n) not accepted.
+
 #include<iostream>
 #include<vector>
 using namespace std;
