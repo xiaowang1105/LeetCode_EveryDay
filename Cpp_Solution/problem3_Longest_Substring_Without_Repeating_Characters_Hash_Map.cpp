@@ -6,26 +6,27 @@
  ************************************************************************/
 
 #include<iostream>
-#include<set>
 #include<string.h>
+#include<unordered_map>
 using namespace std;
 
 class Solution {
     public:
     int lengthOfLongestSubstring(string s) {
-        set<char> chset; // a character set, quickly search for duplicated element
+        unordered_map <char, int> char_map;
         int i = 0, j = 0, max_len = 0;
         int n = s.length();
         while(i < n && j < n){
-            if(chset.find(s[j]) == chset.end()){
-                chset.insert(s[j]);
+            if(char_map.count(s[j]) == 0 || char_map[s[j]] < i) {
+                char_map[s[j]] = j;
                 j++;
-                max_len = max(max_len, j -i); 
+                max_len = max(max_len, j - i);
             }
-            else{
-                chset.erase(chset.find(s[i]));
-                i++;
-            }   
+            else {
+                i = char_map[s[j]] + 1;
+                char_map[s[j]] = j;
+                j++;
+            }
         }
         return max_len;
     }
