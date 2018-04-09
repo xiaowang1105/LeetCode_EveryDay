@@ -6,25 +6,29 @@
  ************************************************************************/
 
 #include<iostream>
+#include<set>
 #include<string.h>
 using namespace std;
 
 class Solution {
     public:
     int lengthOfLongestSubstring(string s) {
+        set<char> chset; // a character set, quickly search for duplicated element
         int i = 0, j = 0, max_len = 0;
         int n = s.length();
         while(i < n && j < n){
-            if(allUnique(s, i, j)) {j++; max_len = max(max_len, j - i);}
-            else {i++;}
+            if(chset.find(s[j]) == chset.end()){
+                chset.insert(s[j]);
+                j++;
+                max_len = max(max_len, j -i);
+                            
+            }
+            else{
+                chset.erase(chset.find(s[i]));
+                i++;
+            }   
         }
         return max_len;
-    }
-    bool allUnique(string s, int start, int end){
-        for(int i = start; i < end; i++){
-            if(s[i] == s[end]) {return false;}
-        return true;    
-        }
     }
 };
 
