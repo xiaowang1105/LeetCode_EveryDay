@@ -11,27 +11,51 @@ using namespace std;
 
 class Solution {
 public:
-    string longestPalindrome(string s){
+    string pre_process(string s){
         int n = s.length();
-        bool P[n][n];
-        // store answers while doing dynamic programming
-        int ans[2] = {0, 0};
+        string new_s(2 * n + 1, '#');
+        for(int i = 0; i < n; i++) new_s[2 * i + 1] = s[i];
+        return new_s;
+    }
 
-        // set up base cases
-        for (int j = 0; j < n; j++) P[j][j] = true;
-        for (int j = 0; j < n - 1; j++){
-            P[j][j + 1] = (s[j] == s[j + 1]);
-            if (P[j][j + 1] && 2 > (ans[1] - ans[0] + 1)) ans[0] = j, ans[1] = j + 1;
+    string post_process(string s){
+        int n = s.length();
+        char* str = new char(n);
+        char* temp = str;
+
+        for (int i = 0; i < n; i++){
+            if(s[i] != '#') *temp = s[i], temp++;
         }
 
-        // bottom up
-        for (int i = 3; i <= n; i++){
-            for (int j = 0; j < n - i + 1; j++){
-                P[j][j + i - 1] = P[j + 1][j + i - 2] && (s[j] == s[j + i - 1]);
-                if (P[j][j + i - 1] && i > (ans[1] - ans[0] + 1)) ans[0] = j, ans[1] = j + i - 1;
-            }
+        *temp = '\0';
+        return str;
+    }
+
+    string longestPalindrome(string s) {
+        string new_s = pre_process(s);
+        int n = new_s.length(), R = 0, C = 0;
+        int P[n];
+
+        for (int i = 0; i < n; i++){
+            int i_mirror = 2 * C - i;
+
+            if (R > i && i_mirror >= 0) P[i] = min(P[i_mirror], R - i);
+            else P[i] = 0;
+
+            while(new_s[i + P[i] + 1] == new_s[i - P[i] - 1] && i - P[i] - 1 >=0 && i + P[i] + 1 < n) 
+                P[i]++;
+
+            if (i + P[i] > R) C = i, R = i + P[i];
         }
-        return s.substr(ans[0], ans[1] - ans[0] + 1);
+
+        int max_len = 0, center = 0;
+
+        for (int i = 0; i < n; i++) {
+            if (P[i] > max_len) max_len = P[i], center = i;
+        }
+
+        string result = new_s.substr(center - max_len, 2 * max_len + 1);
+        return post_process(result);
     }
 };
 
