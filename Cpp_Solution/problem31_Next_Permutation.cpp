@@ -19,17 +19,26 @@ public:
         for (int j = i; j < k; j++, k--) {
             swap(nums[j], nums[k]);
         }
+        for (int l = 0; l < nums.size(); l++) {
+            cout << nums[l] << "->";
+        }
+        cout << endl;
+
         if (i > 0) {
             k = i--;
-            while (nums[k] <= nums[i])
+            cout << "current k: " << k << "i: " << i  << endl; 
+            while (nums[k] <= nums[i]) {
+                cout << "current k " << k << endl;
+                cout << "current i " << i << endl;
                 k++;
+            }
         }
         swap(nums[i], nums[k]);
     }
 };
 
 int main() {
-    static const int arr[] = {16,2,77,29};
+    static const int arr[] = {1,3,6,8,7,5};
     vector<int> nums (arr, arr + sizeof(arr) / sizeof(arr[0]) );
     Solution solu;
     solu.nextPermutation(nums);
